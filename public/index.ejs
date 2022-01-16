@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lauren</title>
+    <link href="./style.css" rel="stylesheet">
+</head>
+
+<body class='dark-background'>
+
+    <main role="main" class="container">
+        <h3 id='title'>Movies</h3>
+
+        <form name="form" action='/' method="POST">
+
+            <input class='inline' name="title" type="text" placeholder="title">
+            <input class='inline' name="description" type="text" placeholder="description">
+            <input class='inline' name="rating" type="text" placeholder="rating">
+            <button class='inline' type="submit">Submit</button>
+
+        </form>
+
+        <% reviews.forEach((review)=>{ %>
+        <div class='review'>
+            <h3><%=review.title%></h3>
+            <h6><%=review.rating%></h6>
+            <div><%=review.description%></div>
+        </div>
+        <%});%>
+
+    </main>
+
+</body>
+
+</html>

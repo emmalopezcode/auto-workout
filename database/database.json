@@ -1,0 +1,27 @@
+{
+    "1": {
+        "title": "Suave",
+        "description": "a great haircare product",
+        "rating": 5.1
+    },
+    "2": {
+        "title": "test",
+        "description": "some of these are the same",
+        "rating": 3.2
+    },
+    "b03570b8": {
+        "title": "test",
+        "description": "test description 123",
+        "rating": 3.2
+    },
+    "9d934b3e": {
+        "title": "test",
+        "description": "test description 123",
+        "rating": 3.2
+    },
+    "f10d2626": {
+        "title": "new product",
+        "description": "test",
+        "rating": "3.5"
+    }
+}
