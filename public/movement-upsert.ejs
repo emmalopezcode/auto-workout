@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form name="form" action='/movement' method="POST">
+
+        <input name="title" placeholder="title">
+        <select name="type" placeholder="type">
+            <option value="push">Push</option>
+            <option value="pull">Pull</option>
+            <option value="other">Other</option>
+        </select>
+        <input name="setup" placeholder="setup">
+        <input name="reps" placeholder="PR reps">
+        <input name="weight" placeholder="PR weight">
+        <button type="submit">Add new movement</button>
+
+    </form>
+
+    <h3><%=error%></h3>
+</body>
+</html>

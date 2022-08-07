@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./css/styles.css" rel="stylesheet">
+
+    <style>
+        input {
+            width: 2rem;
+            margin-right: 1rem;
+        }
+
+        button {
+            display: block;
+            margin: .3rem 0;
+
+        }
+
+        main {
+            padding: 0 25%;
+        }
+
+        h3 {
+            margin: .2rem 0;
+        }
+
+        h6 {
+            margin: .2rem 0;
+        }
+
+        form {
+            margin: 2rem 0;
+        }
+
+        
+    </style>
+
+</head>
+
+<body>
+    <h1 style="text-align: center;">Today's Spread</h1>
+
+    <main>
+        <% movements.forEach((movement)=>{ %>
+            <form action="/updatePR" method="post">
+                <input style="display:none" name="index" value=<%=movement.index%>></input>
+                <input style="display:none" name="type" value=<%=movement.type%>></input>
+                <h3 name="title">
+                    <%=movement.title%>
+                </h3>
+                <h6>
+                    <%=movement.setup%>
+                </h6>
+                <% if (movement.PR && movement.PR.reps) { %>
+                    <label>reps</label>
+                    <input name="reps" value=<%=movement.PR.reps%>></input>
+                <% } %>
+                <% if (movement.PR && movement.PR.reps) { %>
+                    <label>lbs</label>
+                    <input name="weight" value=<%=movement.PR.weight%>></input>
+                <% } %>
+                <button type="submit">update</button>
+            </form>
+        <%});%>
+    </main>
+
+</body>
+
+</html>

@@ -1,38 +1,103 @@
 const fs = require('fs');
 const crypto = require('crypto');
 
-function readObject(path) {
-    const text = fs.readFileSync(path, {encoding: 'utf-8'});
-    return JSON.parse(text);
-}
-
-function writeObject(path, obj) {
-    const text = JSON.stringify(obj);
-    fs.writeFileSync(path, text, {encoding: 'utf-8'})
-}
-
 class Database {
+
 
     constructor(path) {
         this.path = path;
-        this.data = readObject(this.path);
+        this.load();
+        this.format = ["push", "pull", "other", "push", "pull"];
     }
 
-    read() {
-        const db = readObject(this.path);
-        const result = Object.keys(db).map(key => db[key]);
-        return result;
+    load() {
+        const text = fs.readFileSync(this.path, { encoding: 'utf-8' });
+        this.data = JSON.parse(text);
     }
 
-    create(input) {
-        const db = readObject(this.path);
-        let id = (crypto.randomBytes(4)).toString('hex');
-        while (db.hasOwnProperty(id)) {
-            id = (crypto.randomBytes(4)).toString('hex');
+    save() {
+        const text = JSON.stringify(this.data);
+        fs.writeFileSync(this.path, text, { encoding: 'utf-8' });
+    }
+
+    getWorkout() {
+        let curr = this.data.profiles.emma.workout;
+        let twelveHours = 12 * 60 * 60;
+        if (Date.now() - curr.timestamp > twelveHours || !curr.timestamp) {
+        let pushMoves = [...shuffle(this.data.movements.push)];
+        let pullMoves = [...shuffle(this.data.movements.pull)];
+        let newWorkout = {
+            timestamp: Date.now(),
+            movements: [
+                pushMoves.shift(),
+                pullMoves.shift(),
+                randomElement(this.data.movements.other),
+                pushMoves.shift(),
+                pullMoves.shift(),
+            ]
         }
-        db[id] = input;
-        writeObject(this.path, db);
+        this.data.profiles.emma.workout = newWorkout;
+        this.save();
+
+        } else {
+            console.log('still on todays workout');
+        }
+
+        let movements = [];
+        let i = 0;
+        for (let movementType of this.format) {
+            movements.push(
+                {...this.data.profiles.emma[movementType][this.data.profiles.emma.workout.movements[i]],
+                title: this.data.profiles.emma.workout.movements[i],
+                type: movementType,
+                index: i
+                     }
+            )
+            i++;
+        }
+
+        return movements;
     }
+
+    addMovement(input) {
+        if (!input.title) {
+            throw new Error("The movement must have a title");
+        }
+        this.data.movements[input.type].push(input.title);
+
+        this.data.profiles.emma[input.type][input.title] = {
+            setup: input.setup,
+            PR: {
+                reps: input.reps,
+                weight: input.weight
+            }
+        };
+        this.save();
+    }
+
+    updatePR(input) {
+        let title = this.data.profiles.emma.workout.movements[input.index];
+        console.log(title)
+        this.data.profiles.emma[input.type][title] = {
+            PR: {
+                reps: input.reps,
+                weight: input.weight
+            }
+        };
+        this.save();
+    }
+
 }
 
-module.exports = {Database};
+function randomElement(arr) {
+    let randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+}
+
+function shuffle(arr) {
+    return arr.map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+}
+
+module.exports = { Database };
