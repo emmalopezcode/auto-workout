@@ -22,7 +22,8 @@ class Database {
 
     getWorkout() {
         let curr = this.data.profiles.emma.workout;
-        let twelveHours = 12 * 60 * 60;
+        // 60 min in 1 hr, 60 s in 1 min, 1000 ms in 1 s
+        let twelveHours = 12 * 60 * 60 * 1000;
         if (Date.now() - curr.timestamp > twelveHours || !curr.timestamp) {
             let pushMoves = [...shuffle(this.data.movements.push)];
             let pullMoves = [...shuffle(this.data.movements.pull)];
