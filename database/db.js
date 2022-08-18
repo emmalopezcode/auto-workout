@@ -24,34 +24,33 @@ class Database {
         let curr = this.data.profiles.emma.workout;
         let twelveHours = 12 * 60 * 60;
         if (Date.now() - curr.timestamp > twelveHours || !curr.timestamp) {
-        let pushMoves = [...shuffle(this.data.movements.push)];
-        let pullMoves = [...shuffle(this.data.movements.pull)];
-        let newWorkout = {
-            timestamp: Date.now(),
-            movements: [
-                pushMoves.shift(),
-                pullMoves.shift(),
-                randomElement(this.data.movements.other),
-                pushMoves.shift(),
-                pullMoves.shift(),
-            ]
-        }
-        this.data.profiles.emma.workout = newWorkout;
-        this.save();
+            let pushMoves = [...shuffle(this.data.movements.push)];
+            let pullMoves = [...shuffle(this.data.movements.pull)];
+            let newWorkout = {
+                timestamp: Date.now(),
+                movements: [
+                    pushMoves.shift(),
+                    pullMoves.shift(),
+                    randomElement(this.data.movements.other),
+                    pushMoves.shift(),
+                    pullMoves.shift(),
+                ]
+            }
+            this.data.profiles.emma.workout = newWorkout;
+            this.save();
 
-        } else {
-            console.log('still on todays workout');
         }
 
         let movements = [];
         let i = 0;
         for (let movementType of this.format) {
             movements.push(
-                {...this.data.profiles.emma[movementType][this.data.profiles.emma.workout.movements[i]],
-                title: this.data.profiles.emma.workout.movements[i],
-                type: movementType,
-                index: i
-                     }
+                {
+                    ...this.data.profiles.emma[movementType][this.data.profiles.emma.workout.movements[i]],
+                    title: this.data.profiles.emma.workout.movements[i],
+                    type: movementType,
+                    index: i
+                }
             )
             i++;
         }
